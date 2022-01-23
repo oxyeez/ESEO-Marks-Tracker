@@ -1,0 +1,23 @@
+{
+    "login_url": "https://login.microsoftonline.com/4d7ad159-1265-437a-b9f6-2946247d5bf9/oauth2/authorize?client_id=00000003-0000-0ff1-ce00-000000000000&response_mode=form_post&protectedtoken=true&response_type=code%20id_token&resource=00000003-0000-0ff1-ce00-000000000000&scope=openid&nonce=8939F2492DCF8642B04FF8FE110A6D3049F86FBCC65BED9A-233699AC875DDE6A00478808ECBE1DCE91331845647FB2554A6999078AA8406D&redirect_uri=https%3A%2F%2Freseaueseo.sharepoint.com%2F_forms%2Fdefault.aspx&state=OD0w&claims=%7B%22id_token%22%3A%7B%22xms_cc%22%3A%7B%22values%22%3A%5B%22CP1%22%5D%7D%7D%7D&wsucxt=1&cobrandid=11bd8083-87e0-41b5-bb78-0bc43c8a8e8a&client-request-id=b89719a0-80f6-3000-b873-fa9c35225275",
+    "url_json_marks": "https://reverse-proxy.eseo.fr/API-SP/api/notes/getUE/48661/",
+    "json_marks_id": "",
+    "headers": {
+        "Accept": "*/*",
+        "Origin": "https://reseaueseo.sharepoint.com",
+        "Referer": "https://reseaueseo.sharepoint.com/",
+        "Accept-Language": "en-GB,en;q=0.9",
+        "Host": "reverse-proxy.eseo.fr",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36",
+        "Authorization": "Will be filed automaticaly",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Connection": "keep-alive"
+    },
+    "eseo_email": "",
+    "eseo_password": "",
+    "mailjet_api_key": "",
+    "mailjet_api_secret": "",
+    "mailjet_from": "",
+    "mailjet_to": "",
+    "your_name": ""
+}
