@@ -32,6 +32,7 @@ The config.json file need to be completed:
 To find this value you need to go to the sharepoint, the open the inspector and go in the network tab.
 Then load the "Mes notes" page, and clic on the semester for which one you want to track the marks.
 There you should find a file named with a 5 digit value, just whrite theese values for json_marks_id.
+![How to find json_marks_id](https://github.com/oxyeez/ESEO-Marks-Tracker/blob/main/img/json_marks_id.png?raw=true)
 
 ## Then
 
