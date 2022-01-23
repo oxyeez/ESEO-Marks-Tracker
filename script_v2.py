@@ -104,7 +104,7 @@ def grab_marks_json():
         print("Need to update token")
         update_headers()
         config = load_config()
-        response = requests.request(method="GET", url=config["url_json_marks"], headers=config["headers"])
+        response = requests.request(method="GET", url=config["url_json_marks"] + config["json_marks_id"], headers=config["headers"])
 
     return process_marks(clean_json(json.loads(response.text)))
 
