@@ -157,11 +157,11 @@ def search_for_changes(old_json, new_json):
                     if ue_new["ue_name"] not in changes:
                         changes[ue_new["ue_name"]] = {"old_mean":ue_old["ue_mean"], "new_mean":ue_new["ue_mean"]}
                     changes[ue_new["ue_name"]][mater_new["mater_name"]] = {"old_mark":mater_old["mater_mark"],"new_mark":mater_new["mater_mark"]}
-                elif mater_old == None:
+                elif mater_old == None and mater_new["mater_mark"] != None:
                     if ue_new["ue_name"] not in changes:
                         changes[ue_new["ue_name"]] = {"old_mean":ue_old["ue_mean"], "new_mean":ue_new["ue_mean"]}
                     changes[ue_new["ue_name"]][mater_new["mater_name"]] = {"old_mark":None,"new_mark":mater_new["mater_mark"]}
-        else:
+        elif ue_old == None and ue_new["ue_mean"] != None:
             changes[ue_new["ue_name"]] = {"old_mean":None, "new_mean":ue_new["ue_mean"]}
             for mater_new in ue_new["maters"]:
                 changes[ue_new["ue_name"]][mater_new["mater_name"]] = {"old_mark":None,"new_mark":mater_new["mater_mark"]}
