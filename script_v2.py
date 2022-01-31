@@ -1,9 +1,12 @@
 import json
-import time
 import os.path
+import smtplib
+import time
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.utils import formataddr
 
 import requests
-from mailjet_rest import Client
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -211,34 +214,22 @@ def generate_html_email(changes, old_json, new_json):
 
 def send_email(mail_body):
     config = load_config()
-    api_key = config["mailjet_api_key"]
-    api_secret = config["mailjet_api_secret"]
-    mailjet = Client(auth=(api_key, api_secret), version='v3.1')
-    data = {
-    'Messages': [
-        {
-        "From": {
-            "Email": config["mailjet_from"],
-            "Name": "Notes Tracker"
-        },
-        "To": [
-            {
-            "Email": config["mailjet_to"],
-            "Name": config["your_name"]
-            }
-        ],
-        "Subject": "Nouvelles Notes",
-        "HTMLPart": mail_body
-        }
-    ]
-    }
-    result = mailjet.send.create(data=data)
-    if result.status_code != 200:
-        send_email(mail_body)
+    msg = MIMEMultipart()
+    msg['From'] = formataddr(('Notes Tracker', config["addr_from"]))
+    msg['To'] = formataddr((config["your_name"], config["addr_to"]))
+    msg['Subject'] = 'Nouvelles Notes'
+    msg.attach(MIMEText(mail_body, 'html'))
+    mailserver = smtplib.SMTP('smtp.gmail.com', 587)
+    mailserver.ehlo()
+    mailserver.starttls()
+    mailserver.ehlo()
+    mailserver.login(config["addr_from"], config["password_from"])
+    mailserver.sendmail(config["addr_from"], config["addr_to"], msg.as_string())
+    mailserver.quit()
 
 
 
-def main():
+if __name__ == '__main__':
     if not os.path.isfile("marks.json"):
         print("Seams that there is no old marks...\nFor this time the marks will only be loaded.")
         new_json = grab_marks_json()
@@ -258,5 +249,3 @@ def main():
         else:
             print("No new marks found.")
 
-
-main()

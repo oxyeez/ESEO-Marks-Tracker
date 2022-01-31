@@ -15,9 +15,8 @@
     },
     "eseo_email": "",
     "eseo_password": "",
-    "mailjet_api_key": "",
-    "mailjet_api_secret": "",
-    "mailjet_from": "",
-    "mailjet_to": "",
+    "addr_from": "",
+    "password_from":"",
+    "addr_to": "",
     "your_name": ""
 }

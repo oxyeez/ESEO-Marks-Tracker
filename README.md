@@ -8,23 +8,17 @@ It will search for some new marks and send an email if some new marks are found.
 ### Installation
 
 * chromedriver need to be installed
-* pip install requests
-* pip install mailjet_rest
-* pip install selenium
-
-### Mailjet account
-
-THe scipt use mailjet to send the "new marks" notification, so you need to create a [Mailjet](https://app.mailjet.com/signup) account if you don't already have one.
+* run `pip install requests`
+* run `pip install selenium`
 
 ## Before first run
 
 The config.json file need to be completed: 
 * eseo_email : the email address used to log in the eseo sharepoint
 * eseo_password : the password used to log in the eseo sharepoint
-* mailjet_api_key : the api key provided by mailjet
-* mailjet_api_secret : the api secret provided by mailjet
-* mailjet_from : the address used to send email from mailjet
-* mailjet_to : the address to which one you want to receive the notifications
+* addr_from : the gmail address used to send email
+* password_from : the password of the gmail address used to send email
+* addr_to : the address to which one you want to receive the notifications
 * your_name : quite explicit
 
 ### json_marks_id
