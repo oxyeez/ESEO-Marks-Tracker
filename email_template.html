@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<head>
+    <style>
+        @font-face {
+            font-family: roboto;
+            src: url('https://candidature.eseo.fr/fonts/Roboto-Light.ttf');
+        }
+
+        @font-face {
+            font-family: roboto-bold;
+            font-weight: 700;
+            src: url('https://candidature.eseo.fr/fonts/Roboto-Bold.ttf');
+        }
+
+        h2 {
+            font-family: roboto;
+            padding-left: 30px;
+        }
+
+        .tableUF td {
+            border: solid 1px #000000;
+            font-family: roboto;
+            padding: 1px 3px;
+            text-align: center;
+        }
+
+        .tableUF td.eval {
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .tableUF thead tr {
+            background-color: rgb(124, 159, 247);
+            text-align: left;
+            font-family: roboto-bold;
+            color: #ffffff;
+            font-weight: bold;
+            border: solid 1px #000000;
+        }
+
+        .tableUF th {
+            padding: 2px 4px;
+            text-align: center;
+        }
+
+        .tableUF tr.lineUE .mater {
+            background-color: #eef3ff;
+            font-family: roboto;
+            text-align: left;
+            font-weight: bold;
+            color: #1359a4;
+        }
+
+        .tableUF tr.lineUE .matiere {
+            background-color: #eaf8ff;
+            font-family: roboto;
+            text-align: left;
+            font-weight: bold;
+            color: #003096;
+        }
+
+        .tableUF tr.lineUE {
+            border-top: solid 2px #000000;
+            font-family: roboto;
+            font-size: 8.5pt;
+            font-weight: normal;
+        }
+
+        .tableUF thead {
+            font-size: 9pt;
+        }
+
+        .tableUF {
+            border-collapse: collapse;
+            font-size: 8.5pt;
+            width: 100%;
+            margin-top: 0.4cm;
+            clear: both;
+        }
+
+        td.eval {
+            color: #000000;
+        }
+
+        table.tableSynthesis {
+            width: 100%;
+            margin-top: 20px;
+            font-family: roboto-bold;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th.blocTitleSection {
+            color: #888888;
+            text-align: center;
+        }
+
+        td.blocInfosSection {
+            border-left: solid 1px #888888;
+            text-align: center;
+            border-right: solid 1px #888888;
+            font-size: 14pt;
+            color: #444444;
+        }
+
+        span.valueSection {
+            font-size: 24pt;
+            font-weight: bold;
+        }
+
+        td.mean {
+            font-weight: bold;
+            color: #003096;
+            font-size: 14pt;
+        }
+
+        td span.old {
+            color: red;
+        }
+
+        td span.new {
+            color: rgb(81, 255, 0);
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Il y a des nouveautés dans le bulletin !!</h2>
+    <table class="tableUF">
+        <thead>
+            <tr>
+                <th>Matière</th>
+                <th>Coef</th>
+                <th>Notes</th>
+                <th>Moyenne</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ue in list recursive -%}
+            <tr class="lineUE">
+                <td class="mater" colspan="3">{{ ue["ue_name"]|e }}</td>
+                <td class="mean" rowspan="{{ ue['maters']|length +1 }}">
+                {%- if ue["ue_name"] in changes -%}
+                {%- if changes[ue["ue_name"]]["old_mean"] != None -%}
+                    <span class="old">{{ changes[ue["ue_name"]]["old_mean"] }}</span>
+                {%- endif -%}
+                {%- if changes[ue["ue_name"]]["old_mean"] != None and changes[ue["ue_name"]]["new_mean"] != None -%}
+                    &nbsp;->&nbsp;
+                {%- endif -%}
+                {%- if changes[ue["ue_name"]]["new_mean"] != None -%}
+                    <span class="new">{{ changes[ue["ue_name"]]["new_mean"] }}</span>
+                {%- endif -%}
+                {%- else -%}
+                    {{ ue["ue_mean"] if ue["ue_mean"] != None else "" }}
+                {%- endif -%}
+                </td>
+            </tr>
+            {% for mater in ue["maters"] recursive -%}
+            <tr>
+                <td class="eval">{{ mater["mater_name"] }}</td>
+                <td>{{ mater["mater_coef"] }}</td>
+                <td>
+                {%- if ue["ue_name"] in changes and mater["mater_name"] in changes[ue["ue_name"]] -%}
+                {%- if changes[ue["ue_name"]][mater["mater_name"]]["old_mark"] != None -%}
+                    <span class="old">{{ str(changes[ue["ue_name"]][mater["mater_name"]]["old_mark"]) }}</span>
+                {%- endif -%}
+                {%- if changes[ue["ue_name"]][mater["mater_name"]]["old_mark"] != None and changes[ue["ue_name"]][mater["mater_name"]]["new_mark"] != None -%}
+                    &nbsp;->&nbsp;
+                {%- endif -%}
+                {%- if changes[ue["ue_name"]][mater["mater_name"]]["new_mark"] != None -%}
+                    <span class="new">{{ changes[ue["ue_name"]][mater["mater_name"]]["new_mark"] }}</span>
+                {%- endif -%}
+                {%- else -%}
+                    {{ mater["mater_mark"] if mater["mater_mark"] != None else "" }}
+                {%- endif -%}
+                </td>
+            </tr>
+            {% endfor -%}
+            {% endfor -%}
+        </tbody>
+    </table>
+    <table class="tableSynthesis">
+        <tbody>
+            <tr class="blocSynthese">
+                <th class="blocTitleSection">Moyenne</th>
+            </tr>
+            <tr>
+                <td class="blocInfosSection mean">
+                    <span class="valueSection old">{{ old_mean }}</span>/20
+                    &nbsp;->&nbsp;
+                    <span class="valueSection new">{{ new_mean }}</span>/20
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
