@@ -10,6 +10,7 @@ It will search for some new marks and send an email if some new marks are found.
 * chromedriver need to be installed
 * run `pip install requests`
 * run `pip install selenium`
+* run `pip install Jinja2`
 
 ## Before first run
 
