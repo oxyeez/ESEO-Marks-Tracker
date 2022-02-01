@@ -7,6 +7,7 @@ from email.mime.text import MIMEText
 from email.utils import formataddr
 
 import requests
+from jinja2 import Template
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -173,43 +174,13 @@ def search_for_changes(old_json, new_json):
 
 
 def generate_html_email(changes, old_json, new_json):
-    with open("email_head.html", "r", encoding='utf-8') as html_file:
+    with open("email_template.html", "r", encoding='utf-8') as html_file:
         mail_body = html_file.read()
     
-    mail_body += '<body><h2>Il y a des nouveautés dans le bulletin !!</h2>'
-    mail_body += '<table class="tableUF"><thead><tr>'
-    mail_body += '<th>Matière</th><th>Coef</th><th>Notes</th><th>Moyenne</th></tr></thead><tbody>'
-    
-    for ue in new_json:
-        mail_body += f'<tr class="lineUE"><td class="mater" colspan="3">{str(ue["ue_name"])}</td><td class="mean" rowspan="{len(ue["maters"])+1}">'
-        if ue["ue_name"] in changes:
-            if changes[ue["ue_name"]]["old_mean"] != None and changes[ue["ue_name"]]["new_mean"] != None:
-                mail_body += f'<span class="old">{str(changes[ue["ue_name"]]["old_mean"])}</span> -> <span class="new">{str(changes[ue["ue_name"]]["new_mean"])}</span></td></tr>'
-            elif changes[ue["ue_name"]]["old_mean"] == None and changes[ue["ue_name"]]["new_mean"] != None:
-                mail_body += f'<span class="new">{str(changes[ue["ue_name"]]["new_mean"])}</span></td></tr>'
-            elif changes[ue["ue_name"]]["old_mean"] != None and changes[ue["ue_name"]]["new_mean"] == None:
-                mail_body += f'<span class="old">{str(changes[ue["ue_name"]]["old_mean"])}</span></td></tr>'
-        else:
-            mail_body += f'{str(ue["ue_mean"]) if ue["ue_mean"] != None else str()}</td></tr>'
-       
-        for mater in ue["maters"]:
-            mail_body += f'<tr><td class="eval">{mater["mater_name"]}</td>'
-            mail_body += f'<td>{str(mater["mater_coef"])}</td><td>'
-            if ue["ue_name"] in changes and mater["mater_name"] in changes[ue["ue_name"]]:
-                if changes[ue["ue_name"]][mater["mater_name"]]["old_mark"] != None and changes[ue["ue_name"]][mater["mater_name"]]["new_mark"] != None:
-                    mail_body += f'<span class="old">{str(changes[ue["ue_name"]][mater["mater_name"]]["old_mark"])}</span> -> <span class="new">{str(changes[ue["ue_name"]][mater["mater_name"]]["new_mark"])}</span></td></tr>'
-                elif changes[ue["ue_name"]][mater["mater_name"]]["old_mark"] == None and changes[ue["ue_name"]][mater["mater_name"]]["new_mark"] != None:
-                    mail_body += f'<span class="new">{str(changes[ue["ue_name"]][mater["mater_name"]]["new_mark"])}</span></td></tr>'
-                elif changes[ue["ue_name"]][mater["mater_name"]]["old_mark"] != None and changes[ue["ue_name"]][mater["mater_name"]]["new_mark"] == None:
-                    mail_body += f'<span class="old">{str(changes[ue["ue_name"]][mater["mater_name"]]["old_mark"])}</span></td></tr>'
-            else:
-                mail_body += f'{str(mater["mater_mark"]) if mater["mater_mark"] != None else str()}</td></tr>'
-    
-    mail_body += '</tbody></table><table class="tableSynthesis"><tbody><tr class="blocSynthese"><th class="blocTitleSection">Moyenne</th></tr>'
-    mail_body += f'<tr><td class="blocInfosSection mean"><span class="valueSection old">{process_general_mean(old_json)}</span>/20 -> <span class="valueSection new">{process_general_mean(new_json)}</span>/20</td>'
-    mail_body += '</tr></tbody></table></body>'
-
-    return mail_body
+    t = Template(mail_body)
+    return t.render(list=new_json, changes=changes,
+            old_mean=process_general_mean(old_json),
+            new_mean=process_general_mean(new_json))
 
 
 def send_email(mail_body):
