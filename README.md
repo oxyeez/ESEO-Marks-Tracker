@@ -31,7 +31,7 @@ There you should find a file named with a 5 digit value, just whrite theese valu
 
 ## Then
 
-Then everything should be ready, you can run script_v2.py.
+Then everything should be ready, you can run script.py.
 For the first run the actual marks will be grabed and store because there is nothing to compare.
 Every next run the stored marks will be compared with the actual ones, and if there is a new mark, an email will be sent.
 You can schedule the execution of the script with a cron job and you will receive an email notification each time a new mark is added to your remote marks sheet.
